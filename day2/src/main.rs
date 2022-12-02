@@ -1,3 +1,4 @@
+#![feature(iter_array_chunks)]
 use std::{env, fs};
 
 fn main() {
@@ -6,10 +7,10 @@ fn main() {
     let file = args.next().unwrap();
 
     let content = fs::read_to_string(file).unwrap();
-    let parsed = content.trim().lines().map(|line| {
-        let v = line.split(" ").collect::<Vec<&str>>();
-        <[&str; 2]>::try_from(v).unwrap()
-    });
+    let parsed = content
+        .trim()
+        .lines()
+        .flat_map(|line| line.split(" ").array_chunks::<2>());
 
     if part == "part1" {
         let win = parsed
