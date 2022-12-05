@@ -8,25 +8,20 @@ fn main() {
     let file = args.next().unwrap();
     let content = fs::read_to_string(file).unwrap();
     let pairs = content.trim().lines().map(|line| {
-        let (task1, task2) = line.split_once(",").unwrap();
-        let task1 = task1
-            .split("-")
-            .flat_map(i32::from_str)
-            .next_chunk::<2>()
-            .unwrap();
-        let task2 = task2
-            .split("-")
-            .flat_map(i32::from_str)
-            .next_chunk::<2>()
-            .unwrap();
-        (task1, task2)
+        let tasks = line.split_once(",").unwrap();
+        [tasks.0, tasks.1].map(|task| {
+            task.split("-")
+                .flat_map(i32::from_str)
+                .next_chunk::<2>()
+                .unwrap()
+        })
     });
 
     if part == "part1" {
         let overlap = pairs
             .filter(|pair| {
-                (pair.0[0] <= pair.1[0] && pair.0[1] >= pair.1[1])
-                    || (pair.0[0] >= pair.1[0] && pair.0[1] <= pair.1[1])
+                (pair[0][0] <= pair[1][0] && pair[0][1] >= pair[1][1])
+                    || (pair[0][0] >= pair[1][0] && pair[0][1] <= pair[1][1])
             })
             .inspect(|pair| println!("{pair:?}"));
         let answ = overlap.count();
@@ -34,12 +29,12 @@ fn main() {
     } else if part == "part2" {
         let overlap = pairs
             .filter(|pair| {
-                (pair.0[0] <= pair.1[0] && pair.0[1] >= pair.1[0])
-                    || (pair.0[0] <= pair.1[1] && pair.0[1] >= pair.1[1])
-                    || (pair.0[0] >= pair.1[0] && pair.0[1] <= pair.1[1])
+                (pair[0][0] <= pair[1][0] && pair[0][1] >= pair[1][0])
+                    || (pair[0][0] <= pair[1][1] && pair[0][1] >= pair[1][1])
+                    || (pair[0][0] >= pair[1][0] && pair[0][1] <= pair[1][1])
             })
             .inspect(|pair| println!("{pair:?}"));
         let answ = overlap.count();
-        println!("answer to part 1: {answ}");
+        println!("answer to part 2: {answ}");
     }
 }
