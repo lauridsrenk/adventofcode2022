@@ -1,4 +1,4 @@
-#![feature(round_char_boundary, array_windows)]
+#![feature(array_windows)]
 use std::{env, fs};
 
 fn main() {
@@ -29,12 +29,7 @@ fn look_for_distinct<const N: usize>(parsed: &str) {
             + N;
 
         if line.len() > 35 {
-            println!(
-                "{}...({}): {}",
-                &line[..line.floor_char_boundary(35)],
-                line.len(),
-                word
-            );
+            println!("{}...({}): {}", &line[..35], line.len(), word);
         } else {
             println!("{line:35}: {word}",);
         }
