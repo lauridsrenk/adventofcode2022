@@ -1,4 +1,4 @@
-#![feature(iter_next_chunk)]
+#![feature(iter_array_chunks)]
 use std::str::FromStr;
 use std::{env, fs};
 
@@ -26,14 +26,13 @@ fn main() {
         }
     }
 
-    let instructions = instructions.trim().lines().map(|line| {
-        line.split_whitespace()
-            .skip(1)
-            .step_by(2)
-            .flat_map(usize::from_str)
-            .next_chunk::<3>()
-            .unwrap()
-    });
+    let instructions = instructions
+        .trim()
+        .split_whitespace()
+        .skip(1)
+        .step_by(2)
+        .flat_map(usize::from_str)
+        .array_chunks::<3>();
 
     println!("{stack:?}");
     println!("-------------------------------------------");

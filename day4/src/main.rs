@@ -29,5 +29,5 @@ fn main() {
     };
 
     let count = pairs.filter(filter).count();
-    println!("{count}");
+    println!("solution to {part}: {count}");
 }
