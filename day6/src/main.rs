@@ -16,14 +16,14 @@ fn main() {
 }
 
 fn look_for_distinct<const N: usize>(parsed: &str) {
-    parsed.lines().for_each(|line| {
+    for line in parsed.lines() {
         let word = line
             .as_bytes()
             .array_windows::<N>()
             .position(|arr| {
                 arr.iter()
                     .enumerate()
-                    .all(|(idx, f)| arr[idx + 1..].iter().all(|g| g != f))
+                    .all(|(idx, a)| arr[idx + 1..].iter().all(|b| a != b))
             })
             .unwrap()
             + N;
@@ -31,7 +31,7 @@ fn look_for_distinct<const N: usize>(parsed: &str) {
         if line.len() > 35 {
             println!("{}...({}): {}", &line[..35], line.len(), word);
         } else {
-            println!("{line:35}: {word}",);
+            println!("{line:35}: {word}");
         }
-    });
+    }
 }
