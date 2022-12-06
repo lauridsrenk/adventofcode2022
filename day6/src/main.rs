@@ -1,4 +1,4 @@
-#![feature(array_windows)]
+#![feature(round_char_boundary, array_windows)]
 use std::{env, fs};
 
 fn main() {
@@ -15,9 +15,10 @@ fn main() {
     }
 }
 
-fn look_for_distinct<const N: usize>(strings: &str) {
-    let words = strings.lines().map(|line| {
-        line.as_bytes()
+fn look_for_distinct<const N: usize>(parsed: &str) {
+    parsed.lines().for_each(|line| {
+        let word = line
+            .as_bytes()
             .array_windows::<N>()
             .position(|arr| {
                 arr.iter()
@@ -25,10 +26,17 @@ fn look_for_distinct<const N: usize>(strings: &str) {
                     .all(|(idx, f)| arr[idx + 1..].iter().all(|g| g != f))
             })
             .unwrap()
-            + N
-    });
+            + N;
 
-    for (line, word) in strings.lines().zip(words) {
-        println!("{line:35}: {word}",);
-    }
+        if line.len() > 35 {
+            println!(
+                "{}...({}): {}",
+                &line[..line.floor_char_boundary(35)],
+                line.len(),
+                word
+            );
+        } else {
+            println!("{line:35}: {word}",);
+        }
+    });
 }
