@@ -14,20 +14,15 @@ fn main() {
             .unwrap()
     });
 
-    let filter = if part == "part1" {
-        |pair: &[i32; 4]| {
-            (pair[0] <= pair[2] && pair[1] >= pair[3]) || (pair[0] >= pair[2] && pair[1] <= pair[3])
-        }
+    if part == "part1" {
+        let count = pairs
+            .filter(|[a, b, c, d]| ((a - c) * (b - d)) <= 0)
+            .count();
+        println!("solution to {part}: {count}");
     } else if part == "part2" {
-        |pair: &[i32; 4]| {
-            (pair[0] <= pair[2] && pair[1] >= pair[2])
-                || (pair[0] <= pair[3] && pair[1] >= pair[3])
-                || (pair[0] >= pair[2] && pair[1] <= pair[3])
-        }
-    } else {
-        panic!("part is neither part1 nor part2")
-    };
-
-    let count = pairs.filter(filter).count();
-    println!("solution to {part}: {count}");
+        let count = pairs
+            .filter(|[a, b, c, d]| ((a - d) * (b - c)) <= 0)
+            .count();
+        println!("solution to {part}: {count}");
+    }
 }
